@@ -15,7 +15,7 @@ pipeline {
         stage('Test') {
             steps {
                 // Run Pytest tests
-                sh 'pytest tests/'
+                sh 'export PATH=$PATH:/Users/vexy/Library/Python/3.9/bin && pytest tests/'
             }
         }
         stage('Docker Build') {
