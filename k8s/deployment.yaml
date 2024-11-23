@@ -15,5 +15,6 @@ spec:
       containers:
       - name: data-analytics-app
         image: data-analytics-app:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 5000
