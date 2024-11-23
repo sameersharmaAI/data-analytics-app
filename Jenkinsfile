@@ -36,7 +36,7 @@ pipeline {
             steps {
                 script {
                     // Point Docker to Minikube environment
-                    sh 'eval $(minikube docker-env) && docker build -t data-analytics-app:latest .'
+                    sh 'eval $(minikube docker-env) && docker build -t data-analytics-app:latest -f deployment_app.dockerfile .'
 
                     // Apply Kubernetes manifests
                     sh 'kubectl apply -f k8s/deployment.yaml'
