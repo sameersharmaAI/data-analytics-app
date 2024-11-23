@@ -1,23 +1,16 @@
 ---
 - hosts: all
-  become: true  # Run tasks with sudo privileges
+  become: true  # Run most tasks with sudo privileges
   tasks:
-    # Install Docker on macOS
+    # Install Docker on macOS (without sudo)
     - name: Ensure Docker is installed on macOS
       when: ansible_os_family == "Darwin"
       homebrew:
         name: docker
         state: present
+      become: false  # Do not escalate privileges for Homebrew
 
-    # Install Docker on Debian/Ubuntu
-    - name: Ensure Docker is installed on Debian/Ubuntu
-      when: ansible_os_family == "Debian"
-      apt:
-        name: docker.io
-        state: present
-        update_cache: yes
-
-    # Install kubectl on macOS
+    # Install kubectl on macOS (without sudo)
     - name: Ensure kubectl is installed on macOS
       when: ansible_os_family == "Darwin"
       shell: |
@@ -26,8 +19,17 @@
         mv kubectl /usr/local/bin/kubectl
       args:
         creates: /usr/local/bin/kubectl
+      become: false  # Do not escalate privileges for this task
 
-    # Install kubectl on Debian/Ubuntu
+    # Install Docker on Linux (requires sudo)
+    - name: Ensure Docker is installed on Debian/Ubuntu
+      when: ansible_os_family == "Debian"
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    # Install kubectl on Linux (requires sudo)
     - name: Ensure kubectl is installed on Debian/Ubuntu
       when: ansible_os_family == "Debian"
       shell: |
