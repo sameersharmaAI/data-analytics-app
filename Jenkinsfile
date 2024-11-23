@@ -5,8 +5,9 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    // Install dependencies
-                    sh 'pip install -r requirements.txt'
+                    // Install dependencies with pip3
+                    sh 'python3 -m pip install --upgrade pip'
+                    sh 'python3 -m pip install -r requirements.txt'
                 }
             }
         }
@@ -19,7 +20,6 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    // Build the Docker image
                     docker.build('my-python-app:latest')
                 }
             }
@@ -27,10 +27,7 @@ pipeline {
         stage('Deploy to Minikube') {
             steps {
                 script {
-                    // Load Docker image to Minikube
                     sh 'eval $(minikube docker-env) && docker build -t my-python-app:latest .'
-                    
-                    // Apply Kubernetes deployment files
                     sh 'kubectl apply -f k8s-deployment.yaml'
                 }
             }
