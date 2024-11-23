@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        customTool 'minikube' // Ensure the custom tool for Minikube is configured as explained earlier
-        dockerTool 'docker' // Ensure Docker is configured in Jenkins
+        com.cloudbees.jenkins.plugins.customtools.CustomTool 'minikube' // Ensure the custom tool for Minikube is configured properly
+        dockerTool 'docker' // Use the configured Docker tool
     }
 
     stages {
