@@ -41,9 +41,9 @@
 
     # Deploy the Kubernetes application
     - name: Deploy Kubernetes application
-      command: kubectl apply -f k8s/deployment.yaml
+      command: kubectl apply -f ./k8s/deployment.yaml
 
 
     # Deploy the Kubernetes service
     - name: Deploy Kubernetes service
-      command: kubectl apply -f k8s/service.yaml
+      command: kubectl apply -f ./k8s/service.yaml
