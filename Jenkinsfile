@@ -21,13 +21,15 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    docker.build('data-analytics-app:latest')
+                    // Ensure Docker is accessible
+                    sh 'export PATH=$PATH:/usr/local/bin && docker build -t data-analytics-app:latest .'
                 }
             }
         }
         stage('Deploy to Minikube') {
             steps {
                 script {
+                    // Ensure Docker is pointing to Minikube and deploy to Kubernetes
                     sh 'eval $(minikube docker-env) && docker build -t my-python-app:latest .'
                     sh 'kubectl apply -f k8s-deployment.yaml'
                 }
