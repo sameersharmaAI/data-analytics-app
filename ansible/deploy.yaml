@@ -1,10 +1,46 @@
 ---
 - hosts: all
+  become: true  # Run tasks with sudo privileges
   tasks:
-    - name: Install Docker
+    # Install Docker on macOS
+    - name: Ensure Docker is installed on macOS
+      when: ansible_os_family == "Darwin"
+      homebrew:
+        name: docker
+        state: present
+
+    # Install Docker on Debian/Ubuntu
+    - name: Ensure Docker is installed on Debian/Ubuntu
+      when: ansible_os_family == "Debian"
       apt:
         name: docker.io
         state: present
+        update_cache: yes
 
-    - name: Deploy Application
-      command: kubectl apply -f /path/to/k8s/deployment.yaml
+    # Install kubectl on macOS
+    - name: Ensure kubectl is installed on macOS
+      when: ansible_os_family == "Darwin"
+      shell: |
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"
+        chmod +x kubectl
+        mv kubectl /usr/local/bin/kubectl
+      args:
+        creates: /usr/local/bin/kubectl
+
+    # Install kubectl on Debian/Ubuntu
+    - name: Ensure kubectl is installed on Debian/Ubuntu
+      when: ansible_os_family == "Debian"
+      shell: |
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x kubectl
+        mv kubectl /usr/local/bin/kubectl
+      args:
+        creates: /usr/local/bin/kubectl
+
+    # Deploy the Kubernetes application
+    - name: Deploy Kubernetes application
+      command: kubectl apply -f data-analytics-app/k8s/deployment.yaml
+
+    # Deploy the Kubernetes service
+    - name: Deploy Kubernetes service
+      command: kubectl apply -f data-analytics-app/k8s/service.yaml
