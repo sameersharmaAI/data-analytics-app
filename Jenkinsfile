@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     // Ensure Docker is accessible
-                    sh 'export PATH=$PATH:/usr/local/bin && docker build -t data-analytics-app:latest .'
+                    sh 'export PATH=$PATH:/usr/local/bin && docker build -t data-analytics-app:latest -f deployment_app.dockerfile .'
                 }
             }
         }
