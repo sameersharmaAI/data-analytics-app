@@ -1,9 +1,8 @@
 pipeline {
     agent any
 
-    tools {
-        com.cloudbees.jenkins.plugins.customtools.CustomTool 'minikube' // Ensure the custom tool for Minikube is configured properly
-        dockerTool 'docker' // Use the configured Docker tool
+    environment {
+        PATH = "${PATH}:/opt/homebrew/bin:/usr/local/bin" // Add paths for minikube and docker
     }
 
     stages {
@@ -36,9 +35,9 @@ pipeline {
         stage('Deploy to Minikube') {
             steps {
                 script {
-                    // Point Docker to Minikube environment and build the image
+                    // Point Docker to Minikube environment and deploy to Kubernetes
                     sh 'eval $(minikube docker-env) && docker build -t data-analytics-app:latest .'
-                    
+
                     // Apply Kubernetes manifests
                     sh 'kubectl apply -f k8s/deployment.yaml'
                     sh 'kubectl apply -f k8s/service.yaml'
