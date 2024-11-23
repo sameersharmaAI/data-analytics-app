@@ -14,7 +14,7 @@ pipeline {
         stage('Test') {
             steps {
                 // Run Pytest tests
-                sh 'pytest'
+                sh 'pytest tests/'
             }
         }
         stage('Docker Build') {
