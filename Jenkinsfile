@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        PATH = "${PATH}:/opt/homebrew/bin:/usr/local/bin" // Add paths for minikube and docker
+        PATH = "${PATH}:/opt/homebrew/bin:/usr/local/bin:/Users/vexy/Library/Python/3.9/bin" // Add paths for minikube, docker, and Python
     }
 
     stages {
@@ -35,7 +35,7 @@ pipeline {
         stage('Deploy to Minikube') {
             steps {
                 script {
-                    // Point Docker to Minikube environment and deploy to Kubernetes
+                    // Point Docker to Minikube environment
                     sh 'eval $(minikube docker-env) && docker build -t data-analytics-app:latest .'
 
                     // Apply Kubernetes manifests
