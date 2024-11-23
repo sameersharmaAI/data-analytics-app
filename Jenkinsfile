@@ -7,6 +7,7 @@ pipeline {
                 script {
                     // Install dependencies with pip3
                     sh 'python3 -m pip install --upgrade pip'
+                    sh 'python3 -m pip install pytest'
                     sh 'python3 -m pip install -r requirements.txt'
                 }
             }
@@ -20,7 +21,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    docker.build('my-python-app:latest')
+                    docker.build('data-analytics-app:latest')
                 }
             }
         }
